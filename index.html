@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subscriptions – Rakuten</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif; color: #333; background: #fff; font-size: 14px; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── HEADER ── */
+    .header { display: flex; align-items: center; height: 62px; padding: 0 32px; border-bottom: 1px solid #e8e8e8; background: #fff; position: sticky; top: 0; z-index: 100; gap: 32px; }
+    .logo { font-size: 26px; font-weight: 800; color: #8B2BE2; font-style: italic; flex-shrink: 0; cursor: pointer; }
+    .header-nav { display: flex; align-items: center; gap: 24px; }
+    .header-nav a { font-size: 14px; color: #333; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+    .header-nav a:hover { color: #8B2BE2; }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+    .header-right .signin { font-size: 14px; color: #333; font-weight: 500; cursor: pointer; }
+    .header-right .signin:hover { color: #8B2BE2; }
+    .btn-joinnow { background: #8B2BE2; color: #fff; border-radius: 999px; padding: 8px 20px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: background 0.15s; }
+    .btn-joinnow:hover { background: #7B1FD2; }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; max-width: 1200px; margin: 0 auto; padding: 32px 32px 60px; gap: 40px; align-items: flex-start; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: 190px; flex-shrink: 0; }
+    .sidebar-item { display: block; padding: 7px 0; font-size: 13.5px; color: #555; cursor: pointer; transition: color 0.1s; }
+    .sidebar-item:hover { color: #8B2BE2; }
+    .sidebar-item.active { color: #8B2BE2; font-weight: 600; }
+
+    /* ── MAIN ── */
+    .main { flex: 1; min-width: 0; }
+    .page-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .page-subtitle { font-size: 13.5px; color: #666; margin-bottom: 24px; }
+
+    /* merchant rows */
+    .merchant-row { display: flex; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; gap: 16px; }
+    .merchant-row:first-of-type { border-top: 1px solid #f0f0f0; }
+    .merchant-icon { width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .merchant-info { flex: 1; min-width: 0; }
+    .merchant-name { font-size: 14px; font-weight: 600; color: #333; }
+    .merchant-earn { font-size: 13px; color: #8B2BE2; font-weight: 500; margin-top: 2px; }
+    .merchant-tag { display: inline-block; font-size: 11px; background: #F3F0FF; color: #8B2BE2; border-radius: 4px; padding: 2px 7px; margin-top: 4px; font-weight: 500; }
+    .btn-link { background: #8B2BE2; color: #fff; border-radius: 999px; padding: 7px 20px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; flex-shrink: 0; transition: background 0.15s; white-space: nowrap; }
+    .btn-link:hover { background: #7B1FD2; }
+    .btn-link.outline { background: #fff; color: #8B2BE2; border: 1.5px solid #8B2BE2; }
+    .btn-link.outline:hover { background: #F9F5FF; }
+
+    /* ── RIGHT SIDEBAR ── */
+    .right { width: 280px; flex-shrink: 0; }
+    .promo-card { border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px; background: #fff; margin-bottom: 20px; }
+    .promo-label { font-size: 11px; font-weight: 700; color: #8B2BE2; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .promo-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+    .promo-desc { font-size: 13px; color: #555; line-height: 1.5; margin-bottom: 14px; }
+    .promo-cta { display: flex; align-items: center; justify-content: space-between; background: #8B2BE2; color: #fff; border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .promo-cta span { font-size: 16px; }
+
+    .how-card { border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px; background: #fff; }
+    .how-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+    .how-step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+    .how-step:last-child { margin-bottom: 0; }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: #8B2BE2; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-text strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .step-text span { font-size: 12px; color: #666; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">Rakuten</div>
+  <nav class="header-nav">
+    <a href="#">Shop by Category ▾</a>
+    <a href="#">Browser Extension</a>
+    <a href="#">Mobile App</a>
+  </nav>
+  <div class="header-right">
+    <a class="signin" href="dashboard.html">Sign In</a>
+    <button class="btn-joinnow" onclick="location.href='dashboard.html'">Join Now</button>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <nav class="sidebar">
+    <a class="sidebar-item" href="#">Travel &amp; Vacations</a>
+    <a class="sidebar-item" href="#">Beauty &amp; Wellness</a>
+    <a class="sidebar-item" href="#">Clothing</a>
+    <a class="sidebar-item" href="#">Accessories</a>
+    <a class="sidebar-item" href="#">Auto &amp; Tires</a>
+    <a class="sidebar-item" href="#">Baby &amp; Toddler</a>
+    <a class="sidebar-item" href="#">Banking &amp; Finance Tools</a>
+    <a class="sidebar-item" href="#">Business Supplies &amp; Services</a>
+    <a class="sidebar-item" href="#">Digital Services &amp; Streaming</a>
+    <a class="sidebar-item" href="#">Electronics</a>
+    <a class="sidebar-item" href="#">Food, Drinks &amp; Restaurants</a>
+    <a class="sidebar-item" href="#">Gifts, Flowers &amp; Parties</a>
+    <a class="sidebar-item" href="#">Home &amp; Garden</a>
+    <a class="sidebar-item" href="#">Pets</a>
+    <a class="sidebar-item" href="#">Shoes</a>
+    <a class="sidebar-item active" href="index.html">Subscriptions</a>
+    <a class="sidebar-item" href="#">Toys &amp; Games</a>
+    <a class="sidebar-item" href="#">Sports, Outdoors &amp; Fitness</a>
+    <a class="sidebar-item" href="#">Subscription Boxes &amp; Services</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="page-title">Subscriptions</div>
+    <div class="page-subtitle">Link your card once — earn Cash Back on Netflix, Spotify, Adobe &amp; 50+ more, every billing cycle.</div>
+
+    <!-- Netflix -->
+    <div class="merchant-row">
+      <div class="merchant-icon" style="background:#E50914;">🎬</div>
+      <div class="merchant-info">
+        <div class="merchant-name">Netflix</div>
+        <div class="merchant-earn">Earn up to $35/year</div>
+        <div class="merchant-tag">Renewal alerts · Milestone rewards</div>
+      </div>
+      <button class="btn-link" onclick="location.href='netflix.html'">Link Card</button>
+    </div>
+
+    <!-- Spotify -->
+    <div class="merchant-row">
+      <div class="merchant-icon" style="background:#1DB954;">🎵</div>
+      <div class="merchant-info">
+        <div class="merchant-name">Spotify</div>
+        <div class="merchant-earn">5% Cash Back every month</div>
+        <div class="merchant-tag">Evergreen offer</div>
+      </div>
+      <button class="btn-link" onclick="location.href='dashboard.html'">Link Card</button>
+    </div>
+
+    <!-- Adobe -->
+    <div class="merchant-row">
+      <div class="merchant-icon" style="background:#FA0F00;">🔴</div>
+      <div class="merchant-info">
+        <div class="merchant-name">Adobe Creative Cloud</div>
+        <div class="merchant-earn">$15 Cash Back on annual renewal</div>
+        <div class="merchant-tag">Renewal alert · Annual plan</div>
+      </div>
+      <button class="btn-link" onclick="location.href='dashboard.html'">Link Card</button>
+    </div>
+
+    <!-- Hulu -->
+    <div class="merchant-row">
+      <div class="merchant-icon" style="background:#1CE783;">📺</div>
+      <div class="merchant-info">
+        <div class="merchant-name">Hulu</div>
+        <div class="merchant-earn">$10 bonus at 3 months</div>
+        <div class="merchant-tag">Loyalty milestone</div>
+      </div>
+      <button class="btn-link" onclick="location.href='dashboard.html'">Link Card</button>
+    </div>
+
+    <!-- HelloFresh -->
+    <div class="merchant-row">
+      <div class="merchant-icon" style="background:#48BB78;">📦</div>
+      <div class="merchant-info">
+        <div class="merchant-name">HelloFresh</div>
+        <div class="merchant-earn">Up to $20 churn-save bonus</div>
+        <div class="merchant-tag">Merchant-targeted offer</div>
+      </div>
+      <button class="btn-link" onclick="location.href='dashboard.html'">Link Card</button>
+    </div>
+
+    <!-- YouTube Premium -->
+    <div class="merchant-row">
+      <div class="merchant-icon" style="background:#FF0000;">▶️</div>
+      <div class="merchant-info">
+        <div class="merchant-name">YouTube Premium</div>
+        <div class="merchant-earn">$5 Cash Back on renewal</div>
+        <div class="merchant-tag">Annual renewal</div>
+      </div>
+      <button class="btn-link" onclick="location.href='dashboard.html'">Link Card</button>
+    </div>
+
+    <!-- Disney+ -->
+    <div class="merchant-row">
+      <div class="merchant-icon" style="background:#113CCF;">✨</div>
+      <div class="merchant-info">
+        <div class="merchant-name">Disney+</div>
+        <div class="merchant-earn">Earn up to $20/year</div>
+        <div class="merchant-tag">Milestone rewards</div>
+      </div>
+      <button class="btn-link" onclick="location.href='dashboard.html'">Link Card</button>
+    </div>
+
+    <!-- Apple One -->
+    <div class="merchant-row">
+      <div class="merchant-icon" style="background:#555;">🍎</div>
+      <div class="merchant-info">
+        <div class="merchant-name">Apple One</div>
+        <div class="merchant-earn">3% Cash Back monthly</div>
+        <div class="merchant-tag">Evergreen offer</div>
+      </div>
+      <button class="btn-link" onclick="location.href='dashboard.html'">Link Card</button>
+    </div>
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="right">
+    <div class="promo-card">
+      <div class="promo-label">🎁 Bundle Bonus</div>
+      <div class="promo-title">Earn $20 with 3+ subscriptions</div>
+      <div class="promo-desc">
+        Keep <strong>3 or more</strong> subscriptions linked for 3 months and earn a $20 bundle bonus — on top of individual rewards.
+      </div>
+      <div class="promo-cta" onclick="location.href='netflix.html'">
+        Link Card to Activate <span>›</span>
+      </div>
+    </div>
+
+    <div class="how-card">
+      <h3>How to earn with Subscriptions</h3>
+      <div class="how-step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Link your card</strong>
+          <span>Connect your Visa, Mastercard or Amex — one time only.</span>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>We detect your subscriptions</strong>
+          <span>Recurring payments to Netflix, Spotify, Adobe &amp; more are identified automatically.</span>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>Earn at every milestone</strong>
+          <span>Get Cash Back at month 3, month 6, on renewal days, and more.</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+</body>
+</html>

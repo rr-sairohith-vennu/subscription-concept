@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cash Back Activity – Rakuten</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif; color: #333; background: #fff; font-size: 14px; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── HEADER (logged-in) ── */
+    .header { display: flex; align-items: center; height: 62px; padding: 0 28px; border-bottom: 1px solid #e8e8e8; background: #fff; position: sticky; top: 0; z-index: 100; gap: 20px; }
+    .logo { font-size: 26px; font-weight: 800; color: #8B2BE2; font-style: italic; flex-shrink: 0; cursor: pointer; }
+    .header-categories { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; cursor: pointer; padding: 6px 10px; border-radius: 6px; }
+    .header-categories:hover { background: #f5f0ff; color: #8B2BE2; }
+    .cat-icon { font-size: 16px; }
+    .header-search { flex: 1; max-width: 420px; position: relative; }
+    .header-search input { width: 100%; border: 1.5px solid #ddd; border-radius: 8px; padding: 8px 14px 8px 14px; font-size: 13.5px; outline: none; color: #333; }
+    .header-search input:focus { border-color: #8B2BE2; }
+    .search-btn { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); background: #8B2BE2; border: none; border-radius: 6px; width: 32px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+    .header-link { font-size: 13.5px; color: #333; font-weight: 500; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    .header-link:hover { color: #8B2BE2; }
+    .header-link .icon { font-size: 16px; }
+    .user-btn { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 500; cursor: pointer; }
+    .user-btn:hover { color: #8B2BE2; }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; max-width: 1100px; margin: 0 auto; padding: 32px 32px 60px; gap: 40px; align-items: flex-start; }
+
+    /* ── LEFT NAV ── */
+    .leftnav { width: 200px; flex-shrink: 0; }
+    .user-greeting { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .user-lifetime { font-size: 13px; color: #555; margin-bottom: 2px; }
+    .user-since { font-size: 12px; color: #888; margin-bottom: 14px; }
+    .btn-refer { display: inline-block; border: 1.5px solid #8B2BE2; color: #8B2BE2; border-radius: 999px; padding: 6px 16px; font-size: 12.5px; font-weight: 600; cursor: pointer; margin-bottom: 22px; transition: all 0.15s; }
+    .btn-refer:hover { background: #8B2BE2; color: #fff; }
+    .nav-divider { height: 1px; background: #f0f0f0; margin-bottom: 14px; }
+    .nav-link { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13.5px; color: #555; cursor: pointer; }
+    .nav-link:hover { color: #8B2BE2; }
+    .nav-link.active { color: #333; font-weight: 600; }
+    .nav-link .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+    /* ── MAIN ── */
+    .main { flex: 1; min-width: 0; }
+    .page-title { font-size: 22px; font-weight: 700; margin-bottom: 20px; }
+
+    /* alert banner */
+    .alert-banner { border: 1.5px solid #FF9800; border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; }
+    .alert-banner .alert-icon { color: #FF9800; font-size: 18px; flex-shrink: 0; }
+    .alert-banner .alert-text strong { font-size: 13.5px; font-weight: 600; display: block; }
+    .alert-banner .alert-text span { font-size: 12.5px; color: #666; }
+    .btn-alert { border: 1.5px solid #8B2BE2; color: #8B2BE2; background: #fff; border-radius: 999px; padding: 7px 16px; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+    .btn-alert:hover { background: #8B2BE2; color: #fff; }
+
+    /* confirmed/pending box */
+    .cb-summary { border: 1px solid #e8e8e8; border-radius: 8px; padding: 22px 26px; margin-bottom: 20px; }
+    .cb-row { display: flex; gap: 40px; margin-bottom: 10px; }
+    .cb-label { font-size: 12.5px; color: #555; font-weight: 500; margin-bottom: 4px; }
+    .cb-amount { font-size: 28px; font-weight: 700; }
+    .cb-date { font-size: 12px; color: #888; margin-top: 2px; }
+    .cb-info { background: #f8f8f8; border-radius: 6px; padding: 10px 14px; font-size: 12.5px; color: #555; }
+
+    /* section label */
+    .section-label { font-size: 13px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; margin: 24px 0 12px; }
+
+    /* activity rows — subscriptions */
+    .activity-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 8px; transition: border-color 0.15s; }
+    .activity-row:hover { border-color: #c8a8f0; }
+    .activity-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .activity-info { flex: 1; min-width: 0; }
+    .activity-merchant { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 2px; }
+    .activity-desc { font-size: 13.5px; color: #8B2BE2; font-weight: 500; cursor: pointer; }
+    .activity-desc:hover { text-decoration: underline; }
+    .activity-tag { display: inline-block; font-size: 11px; border-radius: 4px; padding: 2px 7px; font-weight: 600; margin-top: 4px; }
+    .tag-renewal { background: #FFF3E0; color: #E65100; }
+    .tag-milestone { background: #E8F5E9; color: #2E7D32; }
+    .tag-churn { background: #FCE4EC; color: #C62828; }
+    .tag-evergreen { background: #F3F0FF; color: #6D28D9; }
+    .btn-progress { background: #8B2BE2; color: #fff; border: none; border-radius: 999px; padding: 7px 18px; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+    .btn-progress:hover { background: #7B1FD2; }
+
+    /* progress bar inside row */
+    .mini-progress { margin-top: 6px; }
+    .mini-progress-bar { height: 5px; background: #eee; border-radius: 3px; overflow: hidden; width: 160px; }
+    .mini-progress-fill { height: 100%; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER (logged in) -->
+<header class="header">
+  <div class="logo" onclick="location.href='index.html'">Rakuten</div>
+  <div class="header-categories">
+    <span class="cat-icon">⊞</span> Categories ▾
+  </div>
+  <div class="header-search">
+    <input type="text" placeholder="Search stores, products, and coupons" />
+    <button class="search-btn">🔍</button>
+  </div>
+  <div class="header-right">
+    <div class="header-link"><span class="icon">🎁</span> Rewards</div>
+    <div class="user-btn">
+      <span>👤</span> Sai Rohith $47.50 ▾
+    </div>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT NAV -->
+  <nav class="leftnav">
+    <div class="user-greeting">Hi Sai Rohith</div>
+    <div class="user-lifetime">$47.50 Lifetime Cash Back</div>
+    <div class="user-since">Member Since 10/05/2024</div>
+    <div class="btn-refer" onclick="location.href='index.html'">Refer &amp; Earn $50+</div>
+    <div class="nav-divider"></div>
+    <div class="nav-link"><span class="nav-icon">👤</span> Account</div>
+    <div class="nav-link active"><span class="nav-icon">📋</span> Cash Back Activity</div>
+    <div class="nav-link"><span class="nav-icon">🛍️</span> Shopping Trips</div>
+    <div class="nav-link"><span class="nav-icon">⚙️</span> Account Settings</div>
+    <div class="nav-link"><span class="nav-icon">❤️</span> Favorite Stores</div>
+    <div class="nav-link"><span class="nav-icon">💳</span> Linked Credit Cards</div>
+    <div class="nav-link"><span class="nav-icon">✉️</span> Email Subscriptions</div>
+    <div class="nav-link"><span class="nav-icon">🔒</span> Privacy Preferences</div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-title">Cash Back Activity</div>
+
+    <!-- Alert: renewal tomorrow -->
+    <div class="alert-banner">
+      <span class="alert-icon">⏰</span>
+      <div class="alert-text">
+        <strong>Adobe Creative Cloud renews tomorrow — earn $15 Cash Back</strong>
+        <span>Your annual plan renews on Mar 16. Cash Back will be credited automatically.</span>
+      </div>
+      <button class="btn-alert">Got it</button>
+    </div>
+
+    <!-- CB Summary -->
+    <div class="cb-summary">
+      <div class="cb-row">
+        <div>
+          <div class="cb-label">Confirmed</div>
+          <div class="cb-amount">$47.50</div>
+          <div class="cb-date">Next payment date: 5/15/2026</div>
+        </div>
+        <div>
+          <div class="cb-label">Pending</div>
+          <div class="cb-amount" style="color:#aaa;">$25.00</div>
+          <div class="cb-date">From active subscription milestones</div>
+        </div>
+      </div>
+      <div class="cb-info">
+        Earn at least $5.01 in confirmed Cash Back to get paid by the next payment date.
+      </div>
+    </div>
+
+    <!-- Subscription Activity -->
+    <div class="section-label">Subscription Rewards</div>
+
+    <!-- Netflix — milestone almost there -->
+    <div class="activity-row">
+      <div class="activity-icon" style="background:#FFF0F0;">🎬</div>
+      <div class="activity-info">
+        <div class="activity-merchant">Netflix</div>
+        <div class="activity-desc">Earn $10 by completing: Stay subscribed through Month 3</div>
+        <div>
+          <span class="activity-tag tag-milestone">Loyalty milestone</span>
+        </div>
+        <div class="mini-progress">
+          <div style="font-size:11px;color:#888;margin-bottom:3px;">Month 2 of 3 — 1 payment away</div>
+          <div class="mini-progress-bar"><div class="mini-progress-fill" style="width:66%;background:#8B2BE2;"></div></div>
+        </div>
+      </div>
+      <button class="btn-progress" onclick="location.href='netflix.html'">See progress</button>
+    </div>
+
+    <!-- Spotify — evergreen -->
+    <div class="activity-row">
+      <div class="activity-icon" style="background:#F0FFF4;">🎵</div>
+      <div class="activity-info">
+        <div class="activity-merchant">Spotify</div>
+        <div class="activity-desc">Earned $2.49 · 5% Cash Back on Mar payment</div>
+        <div>
+          <span class="activity-tag tag-evergreen">Evergreen · Monthly</span>
+        </div>
+        <div class="mini-progress">
+          <div style="font-size:11px;color:#888;margin-bottom:3px;">$12.45 total earned · Month 5</div>
+          <div class="mini-progress-bar"><div class="mini-progress-fill" style="width:100%;background:#4CAF50;"></div></div>
+        </div>
+      </div>
+      <button class="btn-progress" onclick="location.href='dashboard.html'">See progress</button>
+    </div>
+
+    <!-- Adobe — renewing tomorrow -->
+    <div class="activity-row" style="border-color:#FFE0B2;">
+      <div class="activity-icon" style="background:#FFF8F0;">🔴</div>
+      <div class="activity-info">
+        <div class="activity-merchant">Adobe Creative Cloud</div>
+        <div class="activity-desc">Earn $15 by completing: Annual plan renewal — tomorrow</div>
+        <div>
+          <span class="activity-tag tag-renewal">⏰ Renews Mar 16</span>
+        </div>
+        <div class="mini-progress">
+          <div style="font-size:11px;color:#888;margin-bottom:3px;">Renewal detected — Cash Back auto-credited after payment</div>
+          <div class="mini-progress-bar"><div class="mini-progress-fill" style="width:95%;background:#FF9800;"></div></div>
+        </div>
+      </div>
+      <button class="btn-progress" onclick="location.href='dashboard.html'">See progress</button>
+    </div>
+
+    <!-- HelloFresh — churn save -->
+    <div class="activity-row" style="border-color:#FFCDD2;">
+      <div class="activity-icon" style="background:#FFF0F4;">📦</div>
+      <div class="activity-info">
+        <div class="activity-merchant">HelloFresh</div>
+        <div class="activity-desc">Earn $20 by completing: Stay subscribed for 2 more months</div>
+        <div>
+          <span class="activity-tag tag-churn">🚨 Churn-save offer · Expires Apr 1</span>
+        </div>
+        <div class="mini-progress">
+          <div style="font-size:11px;color:#888;margin-bottom:3px;">Month 1 of 3 — merchant-targeted offer</div>
+          <div class="mini-progress-bar"><div class="mini-progress-fill" style="width:20%;background:#E53935;"></div></div>
+        </div>
+      </div>
+      <button class="btn-progress" onclick="location.href='dashboard.html'">See progress</button>
+    </div>
+
+    <!-- Past confirmed -->
+    <div class="section-label">Confirmed Earnings</div>
+
+    <div class="activity-row">
+      <div class="activity-icon" style="background:#F0FFF4;">🎵</div>
+      <div class="activity-info">
+        <div class="activity-merchant">Spotify</div>
+        <div class="activity-desc">5% Cash Back — Feb payment ($9.99)</div>
+        <div><span class="activity-tag tag-evergreen">Confirmed · Feb 22, 2026</span></div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:#4CAF50;white-space:nowrap;">+$0.50</div>
+    </div>
+
+    <div class="activity-row">
+      <div class="activity-icon" style="background:#F0FFF4;">🎵</div>
+      <div class="activity-info">
+        <div class="activity-merchant">Spotify</div>
+        <div class="activity-desc">5% Cash Back — Jan payment ($9.99)</div>
+        <div><span class="activity-tag tag-evergreen">Confirmed · Jan 22, 2026</span></div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:#4CAF50;white-space:nowrap;">+$0.50</div>
+    </div>
+
+  </main>
+
+</div>
+</body>
+</html>

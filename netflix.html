@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netflix – Subscription Rewards – Rakuten</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif; color: #333; background: #fff; font-size: 14px; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── HEADER ── */
+    .header { display: flex; align-items: center; height: 62px; padding: 0 32px; border-bottom: 1px solid #e8e8e8; background: #fff; position: sticky; top: 0; z-index: 100; gap: 32px; }
+    .logo { font-size: 26px; font-weight: 800; color: #8B2BE2; font-style: italic; flex-shrink: 0; cursor: pointer; }
+    .header-nav { display: flex; align-items: center; gap: 24px; }
+    .header-nav a { font-size: 14px; color: #333; font-weight: 500; }
+    .header-nav a:hover { color: #8B2BE2; }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+    .signin { font-size: 14px; color: #333; font-weight: 500; cursor: pointer; }
+    .signin:hover { color: #8B2BE2; }
+    .btn-joinnow { background: #8B2BE2; color: #fff; border-radius: 999px; padding: 8px 20px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: background 0.15s; }
+    .btn-joinnow:hover { background: #7B1FD2; }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; max-width: 1200px; margin: 0 auto; padding: 32px 32px 60px; gap: 40px; align-items: flex-start; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: 190px; flex-shrink: 0; }
+    .sidebar-item { display: block; padding: 7px 0; font-size: 13.5px; color: #555; cursor: pointer; }
+    .sidebar-item:hover { color: #8B2BE2; }
+    .sidebar-item.active { color: #8B2BE2; font-weight: 600; }
+
+    /* ── MAIN ── */
+    .main { flex: 1; min-width: 0; }
+
+    /* breadcrumb */
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #666; margin-bottom: 20px; }
+    .breadcrumb a { color: #8B2BE2; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* merchant header */
+    .merchant-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+    .merchant-big-icon { width: 80px; height: 80px; border-radius: 16px; background: #E50914; display: flex; align-items: center; justify-content: center; font-size: 38px; flex-shrink: 0; }
+    .merchant-header-text h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .merchant-header-text p { font-size: 13.5px; color: #555; line-height: 1.5; max-width: 420px; }
+
+    /* CTA button */
+    .btn-main { display: block; width: 100%; text-align: center; background: #8B2BE2; color: #fff; border-radius: 999px; padding: 13px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; margin-bottom: 24px; transition: background 0.15s; }
+    .btn-main:hover { background: #7B1FD2; }
+
+    /* cross-promo card */
+    .crosspromo { border: 1px solid #e8e8e8; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+    .crosspromo-icon { width: 64px; height: 64px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; background: #F3F0FF; }
+    .crosspromo-label { font-size: 12px; font-weight: 700; color: #8B2BE2; margin-bottom: 4px; }
+    .crosspromo-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .crosspromo-desc { font-size: 12.5px; color: #555; line-height: 1.4; }
+    .crosspromo-desc strong { color: #333; }
+
+    /* milestones */
+    .milestones-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+    .milestone-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 8px; gap: 14px; }
+    .milestone-left { display: flex; align-items: center; gap: 14px; }
+    .milestone-badge { min-width: 64px; height: 30px; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; padding: 0 10px; flex-shrink: 0; }
+    .milestone-badge.done { background: #4CAF50; color: #fff; }
+    .milestone-badge.pending { background: #f0f0f0; color: #999; }
+    .milestone-label { font-size: 13.5px; color: #333; }
+    .milestone-sublabel { font-size: 12px; color: #888; margin-top: 2px; }
+    .check-icon { color: #4CAF50; font-size: 20px; }
+    .milestone-next { font-size: 11.5px; color: #8B2BE2; font-weight: 600; white-space: nowrap; }
+
+    /* timeline */
+    .timeline-section { margin-top: 28px; margin-bottom: 0; }
+    .timeline-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+    .timeline-track { display: flex; align-items: flex-start; position: relative; padding: 0 8px; margin-bottom: 6px; }
+    .timeline-track::before { content: ''; position: absolute; top: 14px; left: 36px; right: 36px; height: 2px; background: #e0e0e0; z-index: 0; }
+    .tl-item { flex: 1; text-align: center; position: relative; z-index: 1; }
+    .tl-dot { width: 28px; height: 28px; border-radius: 50%; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+    .tl-dot.done { background: #4CAF50; color: #fff; }
+    .tl-dot.now { background: #8B2BE2; color: #fff; box-shadow: 0 0 0 3px rgba(139,43,226,0.2); }
+    .tl-dot.future { background: #fff; border: 2px solid #ddd; color: #aaa; }
+    .tl-label { font-size: 12px; font-weight: 600; color: #333; }
+    .tl-sub { font-size: 10.5px; color: #888; margin-top: 1px; }
+    .tl-reward { font-size: 11px; color: #4CAF50; font-weight: 700; margin-top: 2px; }
+    .tl-reward.upcoming { color: #8B2BE2; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo" onclick="location.href='index.html'">Rakuten</div>
+  <nav class="header-nav">
+    <a href="index.html">Shop by Category ▾</a>
+    <a href="#">Browser Extension</a>
+    <a href="#">Mobile App</a>
+  </nav>
+  <div class="header-right">
+    <span class="signin" onclick="location.href='dashboard.html'">Sign In</span>
+    <button class="btn-joinnow" onclick="location.href='dashboard.html'">Join Now</button>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <nav class="sidebar">
+    <a class="sidebar-item" href="#">Travel &amp; Vacations</a>
+    <a class="sidebar-item" href="#">Beauty &amp; Wellness</a>
+    <a class="sidebar-item" href="#">Clothing</a>
+    <a class="sidebar-item" href="#">Accessories</a>
+    <a class="sidebar-item" href="#">Auto &amp; Tires</a>
+    <a class="sidebar-item" href="#">Baby &amp; Toddler</a>
+    <a class="sidebar-item" href="#">Banking &amp; Finance Tools</a>
+    <a class="sidebar-item" href="#">Business Supplies &amp; Services</a>
+    <a class="sidebar-item" href="#">Digital Services &amp; Streaming</a>
+    <a class="sidebar-item" href="#">Electronics</a>
+    <a class="sidebar-item" href="#">Food, Drinks &amp; Restaurants</a>
+    <a class="sidebar-item" href="#">Gifts, Flowers &amp; Parties</a>
+    <a class="sidebar-item" href="#">Home &amp; Garden</a>
+    <a class="sidebar-item" href="#">Pets</a>
+    <a class="sidebar-item" href="#">Shoes</a>
+    <a class="sidebar-item active" href="index.html">Subscriptions</a>
+    <a class="sidebar-item" href="#">Toys &amp; Games</a>
+    <a class="sidebar-item" href="#">Sports, Outdoors &amp; Fitness</a>
+    <a class="sidebar-item" href="#">Subscription Boxes &amp; Services</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="index.html">Subscriptions</a>
+      <span>/</span>
+      <span>Netflix</span>
+    </div>
+
+    <!-- Merchant Header -->
+    <div class="merchant-header">
+      <div class="merchant-big-icon">🎬</div>
+      <div class="merchant-header-text">
+        <h1>Netflix</h1>
+        <p>Link your card and earn Cash Back automatically on every Netflix billing cycle — no clicking required. Unlock bonus rewards at loyalty milestones and get notified before every renewal.</p>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <button class="btn-main" onclick="location.href='dashboard.html'">Link card to earn</button>
+
+    <!-- Cross-promo -->
+    <div class="crosspromo">
+      <div class="crosspromo-icon">🎁</div>
+      <div>
+        <div class="crosspromo-label">Bundle Bonus</div>
+        <div class="crosspromo-title">Add Spotify &amp; earn $20 extra</div>
+        <div class="crosspromo-desc">
+          Keep <strong>Netflix + Spotify</strong> linked for 3 months together and earn a <strong>$20 bundle bonus</strong> on top of individual rewards.
+        </div>
+      </div>
+    </div>
+
+    <!-- Lifecycle Timeline -->
+    <div class="timeline-section">
+      <div class="timeline-title">Your Netflix rewards journey</div>
+      <div class="timeline-track">
+        <div class="tl-item">
+          <div class="tl-dot done">✓</div>
+          <div class="tl-label">Month 1</div>
+          <div class="tl-sub">Card linked</div>
+          <div class="tl-reward">Detected</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot done">✓</div>
+          <div class="tl-label">Month 2</div>
+          <div class="tl-sub">$15.49 billed</div>
+          <div class="tl-reward">Active</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot now">3</div>
+          <div class="tl-label">Month 3 🎯</div>
+          <div class="tl-sub">You are here</div>
+          <div class="tl-reward upcoming">Unlock $10!</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot future">6</div>
+          <div class="tl-label">Month 6</div>
+          <div class="tl-sub">Milestone</div>
+          <div class="tl-reward upcoming">+ $15</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot future">12</div>
+          <div class="tl-label">12 Months</div>
+          <div class="tl-sub">Annual</div>
+          <div class="tl-reward upcoming">+ $25</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestones -->
+    <div style="margin-top: 28px;">
+      <div class="milestones-title">Rewards for staying subscribed to Netflix</div>
+
+      <div class="milestone-row">
+        <div class="milestone-left">
+          <div class="milestone-badge done">Linked</div>
+          <div>
+            <div class="milestone-label">Link your card to Netflix</div>
+            <div class="milestone-sublabel">We start tracking your subscription automatically</div>
+          </div>
+        </div>
+        <span class="check-icon">✔</span>
+      </div>
+
+      <div class="milestone-row">
+        <div class="milestone-left">
+          <div class="milestone-badge done">Month 1</div>
+          <div>
+            <div class="milestone-label">First payment detected</div>
+            <div class="milestone-sublabel">$15.49 · Feb 28, 2026</div>
+          </div>
+        </div>
+        <span class="check-icon">✔</span>
+      </div>
+
+      <div class="milestone-row" style="border-color: #8B2BE2; background: #FAFAFA;">
+        <div class="milestone-left">
+          <div class="milestone-badge" style="background:#8B2BE2;color:#fff;">$10</div>
+          <div>
+            <div class="milestone-label">Stay subscribed through Month 3</div>
+            <div class="milestone-sublabel">1 payment away — next bill Mar 28</div>
+          </div>
+        </div>
+        <span class="milestone-next">Almost there →</span>
+      </div>
+
+      <div class="milestone-row">
+        <div class="milestone-left">
+          <div class="milestone-badge pending">$15</div>
+          <div>
+            <div class="milestone-label">Reach Month 6</div>
+            <div class="milestone-sublabel">Stay subscribed for 6 consecutive months</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="milestone-row">
+        <div class="milestone-left">
+          <div class="milestone-badge pending">$10</div>
+          <div>
+            <div class="milestone-label">Annual renewal bonus</div>
+            <div class="milestone-sublabel">Earn every time your annual plan renews</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="milestone-row">
+        <div class="milestone-left">
+          <div class="milestone-badge pending">$25</div>
+          <div>
+            <div class="milestone-label">12-month loyalty reward</div>
+            <div class="milestone-sublabel">Stay subscribed for a full year</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside style="width:260px;flex-shrink:0;">
+    <div style="border:1px solid #e8e8e8;border-radius:8px;padding:20px;background:#fff;">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;">Try these other subscriptions</h3>
+
+      <!-- Spotify -->
+      <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:40px;height:40px;border-radius:8px;background:#1DB954;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎵</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Spotify</div>
+            <div style="font-size:12px;color:#8B2BE2;font-weight:500;">5% CB monthly</div>
+          </div>
+        </div>
+        <button style="background:#8B2BE2;color:#fff;border:none;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;" onclick="location.href='dashboard.html'">Link</button>
+      </div>
+
+      <!-- Adobe -->
+      <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:40px;height:40px;border-radius:8px;background:#FA0F00;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🔴</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Adobe Creative Cloud</div>
+            <div style="font-size:12px;color:#8B2BE2;font-weight:500;">$15 on renewal</div>
+          </div>
+        </div>
+        <button style="background:#8B2BE2;color:#fff;border:none;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;" onclick="location.href='dashboard.html'">Link</button>
+      </div>
+
+      <!-- Hulu -->
+      <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:40px;height:40px;border-radius:8px;background:#1CE783;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📺</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Hulu</div>
+            <div style="font-size:12px;color:#8B2BE2;font-weight:500;">$10 at 3 months</div>
+          </div>
+        </div>
+        <button style="background:#8B2BE2;color:#fff;border:none;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;" onclick="location.href='dashboard.html'">Link</button>
+      </div>
+
+      <!-- HelloFresh -->
+      <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:40px;height:40px;border-radius:8px;background:#48BB78;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📦</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">HelloFresh</div>
+            <div style="font-size:12px;color:#8B2BE2;font-weight:500;">Up to $20 bonus</div>
+          </div>
+        </div>
+        <button style="background:#8B2BE2;color:#fff;border:none;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;" onclick="location.href='dashboard.html'">Link</button>
+      </div>
+    </div>
+  </aside>
+
+</div>
+</body>
+</html>
